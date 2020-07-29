@@ -26,6 +26,8 @@
 
     <string name="action_refresh">Refresh</string>
 
+    <string name="error_message">Please try again</string>
+
     <!-- - - - - - - - - - - - - -->
     <!--Used by SunshineDateUtils-->
     <!-- - - - - - - - - - - - - -->
