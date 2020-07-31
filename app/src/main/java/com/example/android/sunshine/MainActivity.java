@@ -15,9 +15,12 @@
  */
 package com.example.android.sunshine;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,28 +35,36 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView mWeatherTextView;
+    private RecyclerView mRecyclerView;
     TextView errorMessageTextView;
     ProgressBar mLoadingIndicator;
+    private ForecastAdapter mForecastAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
 
-        mWeatherTextView = findViewById(R.id.tv_weather_data);
+        mRecyclerView = findViewById(R.id.recycler_view_forecast);
         errorMessageTextView = findViewById(R.id.tv_error_message);
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+
+        mForecastAdapter = new ForecastAdapter();
+        mRecyclerView.setAdapter(mForecastAdapter);
         loadWeatherData();
     }
 
     public void showWeatherDataView() {
-        mWeatherTextView.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
         errorMessageTextView.setVisibility(View.INVISIBLE);
     }
 
     public void showErrorMessage() {
-        mWeatherTextView.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.INVISIBLE);
         errorMessageTextView.setVisibility(View.VISIBLE);
     }
 
@@ -63,6 +74,23 @@ public class MainActivity extends AppCompatActivity {
         new FetchWeatherTask().execute(location);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemThatWasClicked = item.getItemId();
+        if (itemThatWasClicked == R.id.action_refresh) {
+            mForecastAdapter.setWeatherData(null);
+            loadWeatherData();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.forecast, menu);
+        return true;
+    }
+
+    @SuppressLint("StaticFieldLeak")
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         @Override
@@ -78,10 +106,9 @@ public class MainActivity extends AppCompatActivity {
             URL weatherRequestUrl = NetworkUtils.buildUrl(location);
             try {
                 String JsonWeatherResponse = NetworkUtils.getResponseFromHttpUrl(weatherRequestUrl);
-                String[] simpleJsonWeatherData = OpenWeatherJsonUtils.
+                return OpenWeatherJsonUtils.
                         getSimpleWeatherStringsFromJson(MainActivity.this,
                                 JsonWeatherResponse);
-                return simpleJsonWeatherData;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -93,33 +120,10 @@ public class MainActivity extends AppCompatActivity {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (weatherData != null) {
                 showWeatherDataView();
-                /*
-                 * Iterate through the array and append the Strings to the TextView. The reason why we add
-                 * the "\n\n\n" after the String is to give visual separation between each String in the
-                 * TextView. Later, we'll learn about a better way to display lists of data.
-                 */
-                for (String weatherString : weatherData) {
-                    mWeatherTextView.append((weatherString) + "\n\n\n");
-                }
+                mForecastAdapter.setWeatherData(weatherData);
             } else {
                 showErrorMessage();
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.forecast, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemThatWasClicked = item.getItemId();
-        if (itemThatWasClicked == R.id.action_refresh) {
-            mWeatherTextView.setText("");
-            loadWeatherData();
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
