@@ -12,6 +12,16 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
 
     private String[] mWeatherData;
 
+    private final ForecastAdapterOnClickListener mClickHandler;
+
+    ForecastAdapter(ForecastAdapterOnClickListener mClickHandler) {
+        this.mClickHandler = mClickHandler;
+    }
+
+    public interface ForecastAdapterOnClickListener {
+        void onClick(String weatherForDay);
+    }
+
     @NonNull
     @Override
     public ForecastAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -41,13 +51,21 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         notifyDataSetChanged();
     }
 
-    public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final TextView mWeatherTextView;
 
         public ForecastAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
             this.mWeatherTextView = itemView.findViewById(R.id.tv_weather_data);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            String weatherForDay = mWeatherData[position];
+            mClickHandler.onClick(weatherForDay);
         }
     }
 }
