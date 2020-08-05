@@ -16,6 +16,7 @@
 package com.example.android.sunshine;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.utilities.NetworkUtils;
@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.F
 
     @Override
     public void onClick(String weatherForDay) {
-        Toast.makeText(this, weatherForDay, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, DetailActivity.class);
+        startActivity(intent);
     }
 
     @SuppressLint("StaticFieldLeak")
