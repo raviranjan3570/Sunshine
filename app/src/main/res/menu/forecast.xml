@@ -11,7 +11,10 @@
     <item
         android:id="@+id/action_map"
         android:title="@string/action_map"
-        android:icon="@drawable/ic_baseline_location_on_24"
-        android:orderInCategory="2"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_setting"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
 </menu>
