@@ -16,6 +16,10 @@
 package com.example.android.sunshine.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.v7.preference.PreferenceManager;
+
+import com.example.android.sunshine.R;
 
 public class SunshinePreferences {
 
@@ -52,7 +56,7 @@ public class SunshinePreferences {
      * @param lon      The longitude of the city
      */
     static public void setLocationDetails(Context c, String cityName, double lat, double lon) {
-        /** This will be implemented in a future lesson **/
+        /* This will be implemented in a future lesson **/
     }
 
     /**
@@ -65,7 +69,7 @@ public class SunshinePreferences {
      * @param lon             The longitude of the city
      */
     static public void setLocation(Context c, String locationSetting, double lat, double lon) {
-        /** This will be implemented in a future lesson **/
+        /* This will be implemented in a future lesson **/
     }
 
     /**
@@ -74,7 +78,7 @@ public class SunshinePreferences {
      * @param c Context used to get the SharedPreferences
      */
     static public void resetLocationCoordinates(Context c) {
-        /** This will be implemented in a future lesson **/
+        /* This will be implemented in a future lesson **/
     }
 
     /**
@@ -87,8 +91,10 @@ public class SunshinePreferences {
      * "94043,USA" if SharedPreferences have not been implemented yet.
      */
     public static String getPreferredWeatherLocation(Context context) {
-        /** This will be implemented in a future lesson **/
-        return getDefaultWeatherLocation();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String keyForLocation = context.getString(R.string.pref_location_key);
+        String defaultLocation = context.getString(R.string.pref_location_default);
+        return sharedPreferences.getString(keyForLocation, defaultLocation);
     }
 
     /**
@@ -98,8 +104,14 @@ public class SunshinePreferences {
      * @return true If metric display should be used
      */
     public static boolean isMetric(Context context) {
-        /** This will be implemented in a future lesson **/
-        return true;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String keyForUnit = context.getString(R.string.pref_units_key);
+        String defaultUnit = context.getString(R.string.pref_units_metric);
+        String preferredUnit = sharedPreferences.getString(keyForUnit, defaultUnit);
+        String metric = context.getString(R.string.pref_units_metric);
+        boolean userPrefersMetric;
+        userPrefersMetric = metric.equals(preferredUnit);
+        return !userPrefersMetric;
     }
 
     /**
@@ -122,17 +134,17 @@ public class SunshinePreferences {
      * @return true if lat/long are set
      */
     public static boolean isLocationLatLonAvailable(Context context) {
-        /** This will be implemented in a future lesson **/
+        /* This will be implemented in a future lesson **/
         return false;
     }
 
     private static String getDefaultWeatherLocation() {
-        /** This will be implemented in a future lesson **/
+        /* This will be implemented in a future lesson **/
         return DEFAULT_WEATHER_LOCATION;
     }
 
     public static double[] getDefaultWeatherCoordinates() {
-        /** This will be implemented in a future lesson **/
+        /* This will be implemented in a future lesson **/
         return DEFAULT_WEATHER_COORDINATES;
     }
 }
