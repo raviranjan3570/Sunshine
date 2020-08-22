@@ -26,7 +26,7 @@ import android.support.annotation.Nullable;
 public class WeatherDbHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "weather.db";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String CREATE_SQL_ENTRIES = "CREATE TABLE "
             + WeatherContract.WeatherEntry.TABLE_NAME + " ("
             + WeatherContract.WeatherEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -37,7 +37,9 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
             + WeatherContract.WeatherEntry.COLUMN_HUMIDITY + " REAL NOT NULL, "
             + WeatherContract.WeatherEntry.COLUMN_PRESSURE + " REAL NOT NULL, "
             + WeatherContract.WeatherEntry.COLUMN_WIND_SPEED + " REAL NOT NULL, "
-            + WeatherContract.WeatherEntry.COLUMN_DEGREES + " REAL NOT NULL" + ");";
+            + WeatherContract.WeatherEntry.COLUMN_DEGREES + " REAL NOT NULL, "
+            + " UNIQUE (" + WeatherContract.WeatherEntry.COLUMN_DATE + ") ON CONFLICT REPLACE);";
+
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS "
             + WeatherContract.WeatherEntry.TABLE_NAME;
 
