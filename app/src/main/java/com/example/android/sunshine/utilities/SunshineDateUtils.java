@@ -194,4 +194,21 @@ public final class SunshineDateUtils {
             return dayFormat.format(dateInMillis);
         }
     }
+
+    /**
+     * In order to ensure consistent inserts into WeatherProvider, we check that dates have been
+     * normalized before they are inserted. If they are not normalized, we don't want to accept
+     * them, and leave it up to the caller to throw an IllegalArgumentException.
+     *
+     * @param millisSinceEpoch Milliseconds since January 1, 1970 at midnight
+     * @return true if the date represents the beginning of a day in Unix time, false otherwise
+     */
+    public static boolean isDateNormalized(long millisSinceEpoch) {
+        boolean isDateNormalized = false;
+        if (millisSinceEpoch % DAY_IN_MILLIS == 0) {
+            isDateNormalized = true;
+        }
+
+        return isDateNormalized;
+    }
 }
