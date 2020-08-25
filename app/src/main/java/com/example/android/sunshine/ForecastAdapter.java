@@ -35,7 +35,8 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
+    public void onBindViewHolder(@NonNull ForecastAdapterViewHolder forecastAdapterViewHolder,
+                                 int position) {
         String weatherForThisDay = mWeatherData[position];
         forecastAdapterViewHolder.mWeatherTextView.setText(weatherForThisDay);
     }
@@ -51,7 +52,8 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         notifyDataSetChanged();
     }
 
-    public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements
+            View.OnClickListener {
 
         public final TextView mWeatherTextView;
 

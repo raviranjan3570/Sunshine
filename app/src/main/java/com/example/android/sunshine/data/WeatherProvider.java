@@ -43,7 +43,8 @@ class WeatherProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection,
+                        @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         Cursor cursor;
 
         switch (sUriMatcher.match(uri)) {
@@ -94,7 +95,8 @@ class WeatherProvider extends ContentProvider {
                         if (!SunshineDateUtils.isDateNormalized(weatherDate)) {
                             throw new IllegalArgumentException("Date must be in normalized form.");
                         }
-                        long id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null,
+                        long id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME,
+                                null,
                                 value);
                         if (id != -1) {
                             rowsInserted++;
@@ -106,7 +108,8 @@ class WeatherProvider extends ContentProvider {
                 }
 
                 if (rowsInserted > 0) {
-                    Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri, null);
+                    Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri,
+                            null);
                 }
 
                 return rowsInserted;
@@ -140,12 +143,39 @@ class WeatherProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        throw new RuntimeException("We'll add this feature in next update.");
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        int numRowsDeleted = 0;
+        /*
+         * If we pass null as the selection to SQLiteDatabase#delete, our entire table will be
+         * deleted. However, if we do pass null and delete all of the rows in the table, we won't
+         * know how many rows were deleted. According to the documentation for SQLiteDatabase,
+         * passing "1" for the selection will delete all rows and return the number of rows
+         * deleted, which is what the caller of this method expects.
+         */
+        if (null == selection) selection = "1";
+
+        switch (sUriMatcher.match(uri)) {
+
+            case CODE_WEATHER:
+                numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
+                        WeatherContract.WeatherEntry.TABLE_NAME,
+                        selection,
+                        selectionArgs
+                );
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri " + uri);
+        }
+
+        if (numRowsDeleted != 0) Objects.requireNonNull(getContext()).getContentResolver()
+                .notifyChange(uri, null);
+        return numRowsDeleted;
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s,
+                      @Nullable String[] strings) {
         throw new RuntimeException("We are not implementing update in Sunshine.");
     }
 }

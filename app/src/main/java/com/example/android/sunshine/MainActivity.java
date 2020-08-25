@@ -42,8 +42,10 @@ import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
 
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity implements ForecastAdapter.ForecastAdapterOnClickListener
-        , LoaderManager.LoaderCallbacks<String[]>, SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity implements
+        ForecastAdapter.ForecastAdapterOnClickListener,
+        LoaderManager.LoaderCallbacks<String[]>,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private RecyclerView mRecyclerView;
     TextView errorMessageTextView;
@@ -79,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.F
         errorMessageTextView = findViewById(R.id.tv_error_message);
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
@@ -111,7 +114,8 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.F
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         } else {
-            Log.d(TAG, "Couldn't call" + geoLocation.toString() + ", no receiving app installed!");
+            Log.d(TAG, "Couldn't call" + geoLocation.toString() +
+                    ", no receiving app installed!");
         }
     }
 
@@ -120,7 +124,8 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.F
         int itemThatWasClicked = item.getItemId();
         if (itemThatWasClicked == R.id.action_refresh) {
             invalidateData();
-            LoaderManager.getInstance(this).restartLoader(FORECAST_LOADER_ID, null, this);
+            LoaderManager.getInstance(this).restartLoader(FORECAST_LOADER_ID, null,
+                    this);
             return true;
         }
         if (itemThatWasClicked == R.id.action_map) {
@@ -128,7 +133,8 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.F
             return true;
         }
         if (itemThatWasClicked == R.id.action_setting) {
-            Intent startSettingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+            Intent startSettingsIntent = new Intent(MainActivity.this,
+                    SettingsActivity.class);
             startActivity(startSettingsIntent);
             return true;
         }
@@ -175,7 +181,8 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.F
             @Nullable
             @Override
             public String[] loadInBackground() {
-                String location = SunshinePreferences.getPreferredWeatherLocation(MainActivity.this);
+                String location = SunshinePreferences
+                        .getPreferredWeatherLocation(MainActivity.this);
                 URL weatherRequestUrl = NetworkUtils.buildUrl(location);
 
                 try {
@@ -183,7 +190,8 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.F
                             .getResponseFromHttpUrl(weatherRequestUrl);
 
                     return OpenWeatherJsonUtils
-                            .getSimpleWeatherStringsFromJson(MainActivity.this, jsonWeatherResponse);
+                            .getSimpleWeatherStringsFromJson(MainActivity.this,
+                                    jsonWeatherResponse);
 
                 } catch (Exception e) {
                     e.printStackTrace();

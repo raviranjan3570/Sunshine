@@ -108,7 +108,8 @@ public final class OpenWeatherJsonUtils {
              * the values are returned in-order by day (which is not guaranteed to be correct).
              */
             dateTimeMillis = startDay + SunshineDateUtils.DAY_IN_MILLIS * i;
-            date = SunshineDateUtils.getFriendlyDateString(context, dateTimeMillis, false);
+            date = SunshineDateUtils.getFriendlyDateString(context, dateTimeMillis,
+                    false);
 
             /*
              * Description is in a child array called "weather", which is 1 element long.
@@ -141,10 +142,10 @@ public final class OpenWeatherJsonUtils {
      *
      * @param context         An application context, such as a service or activity context.
      * @param forecastJsonStr The JSON to parse into ContentValues.
-     *
      * @return An array of ContentValues parsed from the JSON.
      */
-    public static ContentValues[] getFullWeatherDataFromJson(Context context, String forecastJsonStr) {
+    public static ContentValues[] getFullWeatherDataFromJson(Context context,
+                                                             String forecastJsonStr) {
         /** This will be implemented in a future lesson **/
         return null;
     }
