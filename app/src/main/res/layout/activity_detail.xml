@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".DetailActivity">
 
+    <!-- Text that describes the weather summary for a given day -->
     <TextView
         android:id="@+id/tv_display_weather"
         android:layout_width="wrap_content"
