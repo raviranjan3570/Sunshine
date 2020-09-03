@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -35,6 +36,8 @@ import android.widget.ProgressBar;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.utilities.FakeDataUtils;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements
         ForecastAdapter.ForecastAdapterOnClickListener,
@@ -53,9 +56,10 @@ public class MainActivity extends AppCompatActivity implements
     public static final int INDEX_WEATHER_CONDITION_ID = 3;
 
     private RecyclerView mRecyclerView;
-    ProgressBar mLoadingIndicator;
+    private ProgressBar mLoadingIndicator;
     private ForecastAdapter mForecastAdapter;
     private final String TAG = MainActivity.class.getSimpleName();
+
     /*
      * This ID will be used to identify the Loader responsible for loading our weather forecast. In
      * some cases, one Activity can deal with many Loaders. However, in our case, there is only one.
@@ -64,14 +68,14 @@ public class MainActivity extends AppCompatActivity implements
      * it is unique and consistent.
      */
     private static final int FORECAST_LOADER_ID = 0;
+
     private int mPosition = RecyclerView.NO_POSITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
-        getSupportActionBar().setElevation(0f);
-
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0f);
 
         FakeDataUtils.insertFakeData(this);
 
@@ -130,13 +134,15 @@ public class MainActivity extends AppCompatActivity implements
 
         /* Setting the adapter attaches it to the RecyclerView in our layout. */
         mRecyclerView.setAdapter(mForecastAdapter);
+
         showLoading();
+
         /*
          * Ensures a loader is initialized and active. If the loader doesn't already exist, one is
          * created and (if the activity/fragment is currently started) starts the loader. Otherwise
          * the last created loader is re-used.
          */
-        getSupportLoaderManager().initLoader(FORECAST_LOADER_ID, null, this);
+        LoaderManager.getInstance(this).initLoader(FORECAST_LOADER_ID, null, this);
     }
 
     /**
@@ -162,16 +168,16 @@ public class MainActivity extends AppCompatActivity implements
      * Uses the URI scheme for showing a location found on a map in conjunction with
      * an implicit Intent. This super-handy Intent is detailed in the "Common Intents" page of
      * Android's developer site:
-     *
-     * @see "http://developer.android.com/guide/components/intents-common.html#Maps"
      * <p>
-     * Protip: Hold Command on Mac or Control on Windows and click that link to automagically
+     * see: "http://developer.android.com/guide/components/intents-common.html#Maps"
+     * <p>
+     * Pro tip: Hold Command on Mac or Control on Windows and click that link to automatically
      * open the Common Intents page
      */
     public void openMapLocation() {
-        double[] coords = SunshinePreferences.getLocationCoordinates(this);
-        String posLat = Double.toString(coords[0]);
-        String posLong = Double.toString(coords[1]);
+        double[] coordinates = SunshinePreferences.getLocationCoordinates(this);
+        String posLat = Double.toString(coordinates[0]);
+        String posLong = Double.toString(coordinates[1]);
         Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -225,13 +231,15 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * This method is for responding to clicks from our list.
      *
-     * @param weatherForDay String describing weather details for a particular day
+     * @param date Normalized UTC time that represents the local date of the weather in GMT time.
      */
     @Override
-    public void onClick(String weatherForDay) {
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(Intent.EXTRA_TEXT, weatherForDay);
-        startActivity(intent);
+    public void onClick(long date) {
+        Intent weatherDetailIntent = new Intent(MainActivity.this,
+                DetailActivity.class);
+        Uri uriForDateThatWasClicked = WeatherContract.WeatherEntry.buildWeatherUriWithDate(date);
+        weatherDetailIntent.setData(uriForDateThatWasClicked);
+        startActivity(weatherDetailIntent);
     }
 
     /**
@@ -241,29 +249,26 @@ public class MainActivity extends AppCompatActivity implements
      * @param loaderArgs Any arguments supplied by the caller.
      * @return Return a new Loader instance that is ready to start loading.
      */
+    @NonNull
     @SuppressLint("StaticFieldLeak")
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, final Bundle loaderArgs) {
 
-        switch (loaderId) {
+        if (loaderId == FORECAST_LOADER_ID) {
+            Uri forecastQueryUri = WeatherContract.WeatherEntry.CONTENT_URI;
+            String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+            String selection = WeatherContract.WeatherEntry.getSqlSelectedForTodayOnwards();
 
-            case FORECAST_LOADER_ID:
-                Uri forecastQueryUri = WeatherContract.WeatherEntry.CONTENT_URI;
-                String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
-                String selection = WeatherContract.WeatherEntry.getSqlSelectedForTodayOnwards();
-
-                return new CursorLoader(
-                        this,
-                        forecastQueryUri,
-                        MAIN_FORECAST_PROJECTION,
-                        selection,
-                        null,
-                        sortOrder
-                );
-
-            default:
-                throw new RuntimeException("Loader not implemented: " + loaderId);
+            return new CursorLoader(
+                    this,
+                    forecastQueryUri,
+                    MAIN_FORECAST_PROJECTION,
+                    selection,
+                    null,
+                    sortOrder
+            );
         }
+        throw new RuntimeException("Loader not implemented: " + loaderId);
     }
 
     /**
@@ -273,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param data   The data generated by the Loader.
      */
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
 
         mForecastAdapter.swapCursor(data);
         if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
@@ -288,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param loader The Loader that is being reset.
      */
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mForecastAdapter.swapCursor(null);
     }
 }

@@ -38,7 +38,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
      * @param mClickHandler The on-click handler for this adapter. This single handler is called
      *                      when an item is clicked.
      */
-    ForecastAdapter(@NonNull Context context, ForecastAdapterOnClickListener mClickHandler) {
+    public ForecastAdapter(@NonNull Context context, ForecastAdapterOnClickListener mClickHandler) {
         mContext = context;
         this.mClickHandler = mClickHandler;
     }
@@ -60,8 +60,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.forecast_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
-        View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
+        View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
         view.setFocusable(true);
         return new ForecastAdapterViewHolder(view);
     }
@@ -80,16 +79,21 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     public void onBindViewHolder(@NonNull ForecastAdapterViewHolder forecastAdapterViewHolder,
                                  int position) {
         mCursor.moveToPosition(position);
+
         /* Read date from the cursor */
         long dateInMills = mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
+
         /* Get human readable string using our utility method */
         String dateString = SunshineDateUtils.getFriendlyDateString(mContext, dateInMills,
                 false);
+
         /* Use the weatherId to obtain the proper description */
         int weatherId = mCursor.getInt(MainActivity.INDEX_WEATHER_CONDITION_ID);
         String description = SunshineWeatherUtils.getStringForWeatherCondition(mContext, weatherId);
+
         /* Read high temperature from the cursor (in degrees celsius) */
         double highInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MAX_TEMP);
+
         /* Read low temperature from the cursor (in degrees celsius) */
         double lowInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MIN_TEMP);
         String highAndLowTemperature = SunshineWeatherUtils.formatHighLows(mContext, highInCelsius,
@@ -127,7 +131,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
      * The interface that receives onClick messages.
      */
     public interface ForecastAdapterOnClickListener {
-        void onClick(String weatherForDay);
+        void onClick(long date);
     }
 
     /**
@@ -155,8 +159,10 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
          */
         @Override
         public void onClick(View view) {
-            String weatherForDay = mWeatherTextView.getText().toString();
-            mClickHandler.onClick(weatherForDay);
+            int adapterPosition = getAdapterPosition();
+            mCursor.moveToPosition(adapterPosition);
+            long dateInMills = mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
+            mClickHandler.onClick(dateInMills);
         }
     }
 }

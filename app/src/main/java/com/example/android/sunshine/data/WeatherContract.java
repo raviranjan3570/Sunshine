@@ -33,6 +33,7 @@ public class WeatherContract {
      * Play Store.
      */
     public static final String CONTENT_AUTHORITY = "com.example.android.sunshine";
+
     /**
      * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
      * the content provider for Sunshine.
@@ -48,10 +49,10 @@ public class WeatherContract {
      * <p>
      * is a valid path for looking at weather data.
      * <p>
-     * content://com.example.android.sunshine/givemeroot/
+     * content://com.example.android.sunshine/giveMeRoot/
      * <p>
      * will fail, as the ContentProvider hasn't been given any information on what to do with
-     * "givemeroot". At least, let's hope not. Don't be that dev, reader. Don't be that dev.
+     * "giveMeRoot". At least, let's hope not. Don't be that dev, reader. Don't be that dev.
      */
     public static final String PATH_WEATHER = "weather";
 

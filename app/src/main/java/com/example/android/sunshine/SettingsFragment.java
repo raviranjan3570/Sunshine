@@ -18,9 +18,6 @@ import com.example.android.sunshine.data.WeatherContract;
  * user will be able to change their preference for units of measurement from metric to imperial,
  * set their preferred weather location, and indicate whether or not they'd like to see
  * notifications.
- * <p>
- * Please note: If you are using our dummy weather services, the location returned will always be
- * Mountain View, California.
  */
 public class SettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -68,6 +65,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             SunshinePreferences.resetLocationCoordinates(activity);
         } else if (key.equals(getString(R.string.pref_units_key))) {
             // units have changed. update lists of weather entries accordingly
+            assert activity != null;
             activity.getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
         }
 

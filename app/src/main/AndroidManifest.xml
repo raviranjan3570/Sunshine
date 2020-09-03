@@ -14,10 +14,10 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
 
-        <!--The manifest entry for our SettingsActivity. Each Activity requires a manifest entry-->
+        <!--The manifest entry for our SettingsActivity-->
         <activity android:name=".SettingsActivity" />
 
-        <!--The manifest entry for our DetailActivity. Each Activity requires a manifest entry-->
+        <!--The manifest entry for our DetailActivity.-->
         <activity
             android:name=".DetailActivity"
             android:label="@string/title_activity_detail"
@@ -27,7 +27,7 @@
                 android:value=".MainActivity" />
         </activity>
 
-        <!--The manifest entry for our MainActivity. Each Activity requires a manifest entry-->
+        <!--The manifest entry for our MainActivity.-->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

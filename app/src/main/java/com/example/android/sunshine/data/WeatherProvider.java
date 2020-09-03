@@ -19,9 +19,6 @@ import java.util.Objects;
  * <p>
  * Although ContentProvider implementation requires the implementation of additional methods to
  * perform single inserts, updates, and the ability to get the type of the data from a URI.
- * However, here, they are not implemented for the sake of brevity and simplicity. If you would
- * like, you may implement them on your own. However, we are not going to be teaching how to do
- * so in this course.
  */
 public class WeatherProvider extends ContentProvider {
 
@@ -50,7 +47,7 @@ public class WeatherProvider extends ContentProvider {
      * use regular expressions to do that right?" Because you're not crazy, that's why.
      * <p>
      * UriMatcher does all the hard work for you. You just have to tell it which code to match
-     * with which URI, and it does the rest automagically. Remember, the best programmers try
+     * with which URI, and it does the rest automatically. Remember, the best programmers try
      * to never reinvent the wheel. If there is a solution for a problem that exists and has
      * been tested and proven, you should almost always use it unless there is a compelling
      * reason not to.
@@ -59,7 +56,7 @@ public class WeatherProvider extends ContentProvider {
      */
     public static UriMatcher buildUriMatcher() {
 
-        /**
+        /*
          * All paths added to the UriMatcher have a corresponding code to return when a match is
          * found. The code passed into the constructor of UriMatcher here represents the code to
          * return for the root URI. It's common to use NO_MATCH as the code for this case.
@@ -67,16 +64,16 @@ public class WeatherProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = WeatherContract.CONTENT_AUTHORITY;
 
-        /**
+        /*
          * For each type of URI you want to add, create a corresponding code. Preferably, these are
          * constant fields in your class so that you can use them throughout the class and you no
          * they aren't going to change. In Sunshine, we use CODE_WEATHER or CODE_WEATHER_WITH_DATE.
          */
 
-        /** This URI is content://com.example.android.sunshine/weather/ */
+        /* This URI is content://com.example.android.sunshine/weather/ */
         matcher.addURI(authority, WeatherContract.PATH_WEATHER, CODE_WEATHER);
 
-        /**
+        /*
          * This URI would look something like content://com.example.android.sunshine/weather/1472214172
          * The "/#" signifies to the UriMatcher that if PATH_WEATHER is followed by ANY number,
          * that it should return the CODE_WEATHER_WITH_DATE code
@@ -102,7 +99,7 @@ public class WeatherProvider extends ContentProvider {
      */
     @Override
     public boolean onCreate() {
-        /**
+        /*
          * As noted in the comment above, onCreate is run on the main thread, so performing any
          * lengthy operations will cause lag in your app. Since WeatherDbHelper's constructor is
          * very lightweight, we are safe to perform that initialization here.
@@ -132,13 +129,13 @@ public class WeatherProvider extends ContentProvider {
                         @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         Cursor cursor;
 
-        /**
+        /*
          * Here's the switch statement that, given a URI, will determine what kind of request is
          * being made and query the database accordingly.
          */
         switch (sUriMatcher.match(uri)) {
 
-            /**
+            /*
              * When sUriMatcher's match method is called with a URI that looks something like this
              *
              *      content://com.example.android.sunshine/weather/1472214172
@@ -152,13 +149,13 @@ public class WeatherProvider extends ContentProvider {
              * a particular date.
              */
             case CODE_WEATHER_WITH_DATE:
-                /**
+                /*
                  * In order to determine the date associated with this URI, we look at the last
                  * path segment. In the comment above, the last path segment is 1472214172 and
                  * represents the number of seconds since the epoch, or UTC time.
                  */
                 String normalizedUtcDateString = uri.getLastPathSegment();
-                /**
+                /*
                  * The query method accepts a string array of arguments, as there may be more
                  * than one "?" in the selection statement. Even though in our case, we only have
                  * one "?", we have to create a string array that only contains one element
@@ -166,16 +163,16 @@ public class WeatherProvider extends ContentProvider {
                  */
                 String[] selectionArguments = new String[]{normalizedUtcDateString};
                 cursor = mOpenHelper.getReadableDatabase().query(
-                        /** Table we are going to query */
+                        /* Table we are going to query */
                         WeatherContract.WeatherEntry.TABLE_NAME,
-                        /**
+                        /*
                          * A projection designates the columns we want returned in our Cursor.
                          * Passing null will return all columns of data within the Cursor.
                          * However, if you don't need all the data from the table, it's best
                          * practice to limit the columns returned in the Cursor with a projection.
                          */
                         projection,
-                        /**
+                        /*
                          * The URI that matches CODE_WEATHER_WITH_DATE contains a date at the end
                          * of it. We extract that date and use it with these next two lines to
                          * specify the row of weather we want returned in the cursor. We use a
@@ -184,7 +181,7 @@ public class WeatherProvider extends ContentProvider {
                          * within the selectionArguments array will be inserted into the
                          * selection statement by SQLite under the hood.
                          */
-                        WeatherContract.WeatherEntry.COLUMN_DATE + " ?= ",
+                        WeatherContract.WeatherEntry.COLUMN_DATE + " = ? ",
                         selectionArguments,
                         null,
                         null,
@@ -192,7 +189,7 @@ public class WeatherProvider extends ContentProvider {
                 );
                 break;
 
-            /**
+            /*
              * When sUriMatcher's match method is called with a URI that looks EXACTLY like this
              *
              *      content://com.example.android.sunshine/weather/
@@ -238,39 +235,35 @@ public class WeatherProvider extends ContentProvider {
     @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        switch (sUriMatcher.match(uri)) {
-
-            case CODE_WEATHER:
-                db.beginTransaction();
-                int rowsInserted = 0;
-                try {
-                    for (ContentValues value : values) {
-                        long weatherDate = value.getAsLong(WeatherContract.WeatherEntry.COLUMN_DATE);
-                        if (!SunshineDateUtils.isDateNormalized(weatherDate)) {
-                            throw new IllegalArgumentException("Date must be in normalized form.");
-                        }
-                        long id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME,
-                                null,
-                                value);
-                        if (id != -1) {
-                            rowsInserted++;
-                        }
+        if (sUriMatcher.match(uri) == CODE_WEATHER) {
+            db.beginTransaction();
+            int rowsInserted = 0;
+            try {
+                for (ContentValues value : values) {
+                    long weatherDate = value.getAsLong(WeatherContract.WeatherEntry.COLUMN_DATE);
+                    if (!SunshineDateUtils.isDateNormalized(weatherDate)) {
+                        throw new IllegalArgumentException("Date must be in normalized form.");
                     }
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
+                    long id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME,
+                            null,
+                            value);
+                    if (id != -1) {
+                        rowsInserted++;
+                    }
                 }
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
 
-                if (rowsInserted > 0) {
-                    Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri,
-                            null);
-                }
+            if (rowsInserted > 0) {
+                Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri,
+                        null);
+            }
 
-                return rowsInserted;
-
-            default:
-                return super.bulkInsert(uri, values);
+            return rowsInserted;
         }
+        return super.bulkInsert(uri, values);
     }
 
     /**
@@ -328,32 +321,28 @@ public class WeatherProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
 
-        /** Users of the delete method will expect the number of rows deleted to be returned. */
-        int numRowsDeleted = 0;
-        /**
-         * If we pass null as the selection to SQLiteDatabase#delete, our entire table will be
-         * deleted. However, if we do pass null and delete all of the rows in the table, we won't
-         * know how many rows were deleted. According to the documentation for SQLiteDatabase,
-         * passing "1" for the selection will delete all rows and return the number of rows
-         * deleted, which is what the caller of this method expects.
+        /* Users of the delete method will expect the number of rows deleted to be returned. */
+        int numRowsDeleted;
+        /*
+          If we pass null as the selection to SQLiteDatabase#delete, our entire table will be
+          deleted. However, if we do pass null and delete all of the rows in the table, we won't
+          know how many rows were deleted. According to the documentation for SQLiteDatabase,
+          passing "1" for the selection will delete all rows and return the number of rows
+          deleted, which is what the caller of this method expects.
          */
         if (null == selection) selection = "1";
 
-        switch (sUriMatcher.match(uri)) {
-
-            case CODE_WEATHER:
-                numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
-                        WeatherContract.WeatherEntry.TABLE_NAME,
-                        selection,
-                        selectionArgs
-                );
-                break;
-
-            default:
-                throw new UnsupportedOperationException("Unknown uri " + uri);
+        if (sUriMatcher.match(uri) == CODE_WEATHER) {
+            numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
+                    WeatherContract.WeatherEntry.TABLE_NAME,
+                    selection,
+                    selectionArgs
+            );
+        } else {
+            throw new UnsupportedOperationException("Unknown uri " + uri);
         }
 
-        /** If we actually deleted any rows, notify that a change has occurred to this URI */
+        /* If we actually deleted any rows, notify that a change has occurred to this URI */
         if (numRowsDeleted != 0) Objects.requireNonNull(getContext()).getContentResolver()
                 .notifyChange(uri, null);
         return numRowsDeleted;
