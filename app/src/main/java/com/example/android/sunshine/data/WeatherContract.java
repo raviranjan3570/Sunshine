@@ -132,7 +132,7 @@ public class WeatherContract {
          *
          * @return The selection part of the weather query for today onwards
          */
-        public static String getSqlSelectedForTodayOnwards() {
+        public static String getSqlSelectedFromTodayOnwards() {
             long normalizedUtcNow = SunshineDateUtils.normalizeDate(System.currentTimeMillis());
             return WeatherEntry.COLUMN_DATE + " >= " + normalizedUtcNow;
         }

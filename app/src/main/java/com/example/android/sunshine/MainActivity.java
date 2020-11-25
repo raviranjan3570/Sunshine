@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements
          */
         LoaderManager.getInstance(this).initLoader(FORECAST_LOADER_ID, null, this);
 
-        SunshineSyncUtils.startImmediateSync(this);
+        SunshineSyncUtils.initialized(this);
     }
 
     /**
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements
         if (loaderId == FORECAST_LOADER_ID) {
             Uri forecastQueryUri = WeatherContract.WeatherEntry.CONTENT_URI;
             String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
-            String selection = WeatherContract.WeatherEntry.getSqlSelectedForTodayOnwards();
+            String selection = WeatherContract.WeatherEntry.getSqlSelectedFromTodayOnwards();
 
             return new CursorLoader(
                     this,
