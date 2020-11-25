@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements
          */
         LoaderManager.getInstance(this).initLoader(FORECAST_LOADER_ID, null, this);
 
-        SunshineSyncUtils.initialized(this);
+        SunshineSyncUtils.initialize(this);
     }
 
     /**
