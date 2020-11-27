@@ -23,8 +23,7 @@ public final class SunshineWeatherUtils {
      * @return Temperature in degrees Fahrenheit (°F)
      */
     private static double celsiusToFahrenheit(double temperatureInCelsius) {
-        double temperatureInFahrenheit = (temperatureInCelsius * 1.8) + 32;
-        return temperatureInFahrenheit;
+        return (temperatureInCelsius * 1.8) + 32;
     }
 
     /**
@@ -39,7 +38,7 @@ public final class SunshineWeatherUtils {
      * "21°"
      */
     public static String formatTemperature(Context context, double temperature) {
-        if (!SunshinePreferences.isMetric(context)) {
+        if (SunshinePreferences.isMetric(context)) {
             temperature = celsiusToFahrenheit(temperature);
         }
 
@@ -66,8 +65,7 @@ public final class SunshineWeatherUtils {
         String formattedHigh = formatTemperature(context, roundedHigh);
         String formattedLow = formatTemperature(context, roundedLow);
 
-        String highLowStr = formattedHigh + " / " + formattedLow;
-        return highLowStr;
+        return formattedHigh + " / " + formattedLow;
     }
 
     /**
@@ -84,7 +82,7 @@ public final class SunshineWeatherUtils {
     public static String getFormattedWind(Context context, float windSpeed, float degrees) {
         int windFormat = R.string.format_wind_kmh;
 
-        if (!SunshinePreferences.isMetric(context)) {
+        if (SunshinePreferences.isMetric(context)) {
             windFormat = R.string.format_wind_mph;
             windSpeed = .621371192237334f * windSpeed;
         }
@@ -328,7 +326,7 @@ public final class SunshineWeatherUtils {
             return R.drawable.ic_snow;
         } else if (weatherId >= 701 && weatherId <= 761) {
             return R.drawable.ic_fog;
-        } else if (weatherId == 761 || weatherId == 771 || weatherId == 781) {
+        } else if (weatherId == 771 || weatherId == 781) {
             return R.drawable.ic_storm;
         } else if (weatherId == 800) {
             return R.drawable.ic_clear;
@@ -381,7 +379,7 @@ public final class SunshineWeatherUtils {
             return R.drawable.art_snow;
         } else if (weatherId >= 701 && weatherId <= 761) {
             return R.drawable.art_fog;
-        } else if (weatherId == 761 || weatherId == 771 || weatherId == 781) {
+        } else if (weatherId == 771 || weatherId == 781) {
             return R.drawable.art_storm;
         } else if (weatherId == 800) {
             return R.drawable.art_clear;

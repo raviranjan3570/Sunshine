@@ -5,6 +5,6 @@
     android:layout_height="match_parent"
     android:id="@+id/action_settings"
     android:name="com.example.android.sunshine.SettingsFragment"
-    tools:context=".SettingsActivity">
+    tools:context=".activities.SettingsActivity">
 
 </fragment>

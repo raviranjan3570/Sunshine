@@ -1,4 +1,4 @@
-package com.example.android.sunshine;
+package com.example.android.sunshine.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.android.sunshine.R;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.utilities.SunshineDateUtils;
 import com.example.android.sunshine.utilities.SunshineWeatherUtils;

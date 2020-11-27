@@ -223,9 +223,14 @@
 
     <!-- The format of the notification we show when the weather is updated -->
     <string name="format_notification">
-        Forecast:<xliff:g id="condition">%1$s</xliff:g> -
-        High:<xliff:g id="high">%2$s</xliff:g>
-        Low:<xliff:g id="low">%3$s</xliff:g>
+        <xliff:g id="high">%1$s</xliff:g> /
+        <xliff:g id="low">%2$s</xliff:g> .
+        <xliff:g id="condition">%3$s</xliff:g> .
+        <xliff:g id="see_full_forecast">%4$s</xliff:g>
     </string>
+
+    <string name="main_notification_channel_name">Primary</string>
+    <string name="prompt_to_see_full_forecast">See Full Forecast</string>
+    <string name="notification_title">Currently</string>
 
 </resources>

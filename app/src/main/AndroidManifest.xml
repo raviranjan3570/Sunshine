@@ -15,11 +15,11 @@
         tools:ignore="AllowBackup">
 
         <!--The manifest entry for our SettingsActivity-->
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".activities.SettingsActivity" />
 
         <!--The manifest entry for our DetailActivity.-->
         <activity
-            android:name=".DetailActivity"
+            android:name=".activities.DetailActivity"
             android:label="@string/title_activity_detail"
             android:parentActivityName=".MainActivity">
             <meta-data

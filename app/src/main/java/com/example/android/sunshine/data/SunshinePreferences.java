@@ -85,8 +85,7 @@ public final class SunshinePreferences {
         if (metric.equals(preferredUnits)) {
             userPrefersMetric = true;
         }
-
-        return userPrefersMetric;
+        return !userPrefersMetric;
     }
 
     /**
@@ -163,9 +162,8 @@ public final class SunshinePreferences {
          * time of the last notification was 0, the difference will always be greater than the
          * number of milliseconds in a day and we will show another notification.
          */
-        long lastNotificationTime = sp.getLong(lastNotificationKey, 0);
 
-        return lastNotificationTime;
+        return sp.getLong(lastNotificationKey, 0);
     }
 
     /**
@@ -176,11 +174,10 @@ public final class SunshinePreferences {
      * @param context Used to access SharedPreferences as well as use other utility methods
      * @return Elapsed time in milliseconds since the last notification was shown
      */
-    public static long getEllapsedTimeSinceLastNotification(Context context) {
+    public static long getElapsedTimeSinceLastNotification(Context context) {
         long lastNotificationTimeMillis =
                 SunshinePreferences.getLastNotificationTimeInMillis(context);
-        long timeSinceLastNotification = System.currentTimeMillis() - lastNotificationTimeMillis;
-        return timeSinceLastNotification;
+        return System.currentTimeMillis() - lastNotificationTimeMillis;
     }
 
     /**

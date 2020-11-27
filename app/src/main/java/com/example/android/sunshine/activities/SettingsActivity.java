@@ -1,9 +1,12 @@
-package com.example.android.sunshine;
+package com.example.android.sunshine.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import com.example.android.sunshine.R;
+import com.example.android.sunshine.SettingsFragment;
 
 /**
  * SettingsActivity is responsible for displaying the {@link SettingsFragment}. It is also
