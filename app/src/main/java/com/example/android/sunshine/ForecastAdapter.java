@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.sunshine.utilities.SunshineDateUtils;
@@ -86,20 +87,25 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         /* Get human readable string using our utility method */
         String dateString = SunshineDateUtils.getFriendlyDateString(mContext, dateInMills,
                 false);
-
+        forecastAdapterViewHolder.tv_weather_date.setText(dateString);
         /* Use the weatherId to obtain the proper description */
         int weatherId = mCursor.getInt(MainActivity.INDEX_WEATHER_CONDITION_ID);
+        forecastAdapterViewHolder.iv_weather_preview.setImageResource(
+                SunshineWeatherUtils.getSmallArtResourceIdForWeatherCondition(weatherId));
         String description = SunshineWeatherUtils.getStringForWeatherCondition(mContext, weatherId);
-
+        forecastAdapterViewHolder.tv_weather_detail.setText(description);
         /* Read high temperature from the cursor (in degrees celsius) */
         double highInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MAX_TEMP);
-
         /* Read low temperature from the cursor (in degrees celsius) */
         double lowInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MIN_TEMP);
-        String highAndLowTemperature = SunshineWeatherUtils.formatHighLows(mContext, highInCelsius,
-                lowInCelsius);
-        String weatherForThisDay = dateString + " - " + description + " - " + highAndLowTemperature;
-        forecastAdapterViewHolder.mWeatherTextView.setText(weatherForThisDay);
+
+        String highTemperature =
+                SunshineWeatherUtils.formatTemperature(mContext, highInCelsius);
+        forecastAdapterViewHolder.tv_max_temperature.setText(highTemperature);
+
+        String lowTemperature =
+                SunshineWeatherUtils.formatTemperature(mContext, lowInCelsius);
+        forecastAdapterViewHolder.tv_min_temperature.setText(lowTemperature);
     }
 
     /**
@@ -142,11 +148,19 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener {
 
-        public final TextView mWeatherTextView;
+        final TextView tv_weather_date;
+        final TextView tv_weather_detail;
+        final TextView tv_min_temperature;
+        final TextView tv_max_temperature;
+        final ImageView iv_weather_preview;
 
         public ForecastAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.mWeatherTextView = itemView.findViewById(R.id.tv_weather_data);
+            tv_weather_date = itemView.findViewById(R.id.day);
+            tv_weather_detail = itemView.findViewById(R.id.weather_detail);
+            tv_min_temperature = itemView.findViewById(R.id.minimum_temperature);
+            tv_max_temperature = itemView.findViewById(R.id.maximum_temperature);
+            iv_weather_preview = itemView.findViewById(R.id.weather_preview);
             itemView.setOnClickListener(this);
         }
 
