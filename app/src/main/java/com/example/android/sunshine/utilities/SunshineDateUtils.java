@@ -229,7 +229,7 @@ public final class SunshineDateUtils {
             } else {
                 return readableDate;
             }
-        } else if (daysFromEpochToProvidedDate < daysFromEpochToToday + 7) {
+        } else if (daysFromEpochToProvidedDate < daysFromEpochToToday + 6) {
             /* If the input date is less than a week in the future, just return the day name. */
             return getDayName(context, localDate);
         } else {
@@ -279,9 +279,9 @@ public final class SunshineDateUtils {
         int daysAfterToday = (int) (daysFromEpochToProvidedDate - daysFromEpochToToday);
 
         switch (daysAfterToday) {
-            case 0:
+            case -1:
                 return context.getString(R.string.today);
-            case 1:
+            case 0:
                 return context.getString(R.string.tomorrow);
 
             default:

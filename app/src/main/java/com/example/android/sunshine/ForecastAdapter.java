@@ -22,6 +22,10 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     /* The context we use to utility methods, app resources and layout inflaters */
     private final Context mContext;
 
+    private static final int VIEW_TYPE_TODAY = 0;
+    private static final int VIEW_TYPE_FUTURE_DAY = 1;
+    private final boolean mUseTodayLayout;
+
     /**
      * Below, we've defined an interface to handle clicks on items within this Adapter. In the
      * constructor of our ForecastAdapter, we receive an instance of a class that has implemented
@@ -42,6 +46,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     public ForecastAdapter(@NonNull Context context, ForecastAdapterOnClickListener mClickHandler) {
         mContext = context;
         this.mClickHandler = mClickHandler;
+        mUseTodayLayout = mContext.getResources().getBoolean(R.bool.use_today_layout);
     }
 
     /**
@@ -59,8 +64,12 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     @Override
     public ForecastAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.forecast_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
+        int layoutIdForListItem;
+
+        if (viewType == VIEW_TYPE_TODAY) layoutIdForListItem = R.layout.list_item_forecast_today;
+        else layoutIdForListItem = R.layout.forecast_list_item;
+
         View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
         view.setFocusable(true);
         return new ForecastAdapterViewHolder(view);
@@ -118,6 +127,12 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     public int getItemCount() {
         if (null == mCursor) return 0;
         return mCursor.getCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mUseTodayLayout && position == 0) return VIEW_TYPE_TODAY;
+        else return VIEW_TYPE_FUTURE_DAY;
     }
 
     /**
