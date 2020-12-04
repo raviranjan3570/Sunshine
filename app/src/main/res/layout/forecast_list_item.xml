@@ -17,7 +17,7 @@
         android:layout_height="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/art_clear" />
+        tools:src="@drawable/ic_clear" />
 
     <TextView
         android:id="@+id/day"
@@ -26,6 +26,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         app:layout_constraintStart_toEndOf="@id/weather_preview"
         app:layout_constraintTop_toTopOf="@id/weather_preview"
         tools:text="Today, December 5" />
@@ -34,6 +35,7 @@
         android:id="@+id/weather_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="@id/day"
         app:layout_constraintTop_toBottomOf="@id/day"
         tools:text="Light Rain" />
@@ -46,6 +48,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
+        android:fontFamily="sans-serif-light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/day"
         tools:text="13" />
@@ -56,6 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:fontFamily="sans-serif-light"
         app:layout_constraintEnd_toStartOf="@id/minimum_temperature"
         app:layout_constraintTop_toTopOf="@id/minimum_temperature"
         tools:text="18" />
