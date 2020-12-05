@@ -206,7 +206,7 @@ public final class SunshineDateUtils {
          */
         long daysFromEpochToToday = elapsedDaysSinceEpoch(System.currentTimeMillis());
 
-        if (daysFromEpochToProvidedDate == daysFromEpochToToday || showFullDate) {
+        if (daysFromEpochToProvidedDate - daysFromEpochToToday == -1 || showFullDate) {
             /*
              * If the date we're building the String for is today's date, the format
              * is "Today, June 24"

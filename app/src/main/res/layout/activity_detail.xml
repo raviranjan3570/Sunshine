@@ -1,64 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent"
-    tools:context=".activities.DetailActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/tv_date"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Saturday, October 1" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-    <!-- Text that describes weather condition -->
-    <TextView
-        android:id="@+id/tv_description"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Sunny" />
+        <include
+            android:id="@+id/primary_weather_info"
+            layout="@layout/list_item_forecast_today"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-    <!-- High temperature for today -->
-    <TextView
-        android:id="@+id/tv_high_temperature"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="78\u00b0" />
+        <include
+            android:id="@+id/extra_weather_info"
+            layout="@layout/extra_weather_details"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-    <!-- Low temperature for today -->
-    <TextView
-        android:id="@+id/tv_low_temperature"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="17\u00b0" />
-
-    <!-- Humidity  -->
-    <TextView
-        android:id="@+id/tv_humidity"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="38%" />
-
-    <!-- Pressure  -->
-    <TextView
-        android:id="@+id/tv_pressure"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="995 hPa" />
-
-    <!-- Wind  -->
-    <TextView
-        android:id="@+id/tv_wind"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="4km/h NW" />
-
-</LinearLayout>
+    </LinearLayout>
+</layout>
