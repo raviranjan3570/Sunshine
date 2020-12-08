@@ -102,7 +102,9 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         forecastAdapterViewHolder.iv_weather_preview.setImageResource(
                 SunshineWeatherUtils.getSmallArtResourceIdForWeatherCondition(weatherId));
         String description = SunshineWeatherUtils.getStringForWeatherCondition(mContext, weatherId);
+        String descriptionAlly = mContext.getString(R.string.a11y_forecast, description);
         forecastAdapterViewHolder.tv_weather_detail.setText(description);
+        forecastAdapterViewHolder.tv_weather_detail.setContentDescription(descriptionAlly);
         /* Read high temperature from the cursor (in degrees celsius) */
         double highInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MAX_TEMP);
         /* Read low temperature from the cursor (in degrees celsius) */
@@ -110,11 +112,15 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
 
         String highTemperature =
                 SunshineWeatherUtils.formatTemperature(mContext, highInCelsius);
+        String highTemperatureAlly = mContext.getString(R.string.a11y_high_temp, highTemperature);
         forecastAdapterViewHolder.tv_max_temperature.setText(highTemperature);
+        forecastAdapterViewHolder.tv_max_temperature.setContentDescription(highTemperatureAlly);
 
         String lowTemperature =
                 SunshineWeatherUtils.formatTemperature(mContext, lowInCelsius);
+        String lowTemperatureAlly = mContext.getString(R.string.a11y_high_temp, highTemperature);
         forecastAdapterViewHolder.tv_min_temperature.setText(lowTemperature);
+        forecastAdapterViewHolder.tv_min_temperature.setContentDescription(lowTemperatureAlly);
     }
 
     /**

@@ -5,58 +5,58 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/detail_accent_pane_background"
+        android:paddingStart="@dimen/forecast_detail_horizontal_padding"
+        android:paddingTop="@dimen/forecast_detail_vertical_padding"
+        android:paddingEnd="@dimen/forecast_detail_horizontal_padding"
+        android:paddingBottom="@dimen/forecast_detail_vertical_padding">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/horizontal_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
         <TextView
             android:id="@+id/humidity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:text="Humidity"
+            style="@style/DetailLabel"
+            android:text="@string/humidity_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/humidity_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/humidity"
+            style="@style/ExtraWeatherMeasurement"
+            app:layout_constraintStart_toStartOf="@+id/horizontal_middle"
             app:layout_constraintTop_toTopOf="@+id/humidity"
             tools:text="78%" />
 
         <TextView
             android:id="@+id/pressure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Pressure"
+            style="@style/DetailLabel"
+            android:text="@string/pressure_label"
             app:layout_constraintStart_toStartOf="@id/humidity"
             app:layout_constraintTop_toBottomOf="@id/humidity" />
 
         <TextView
             android:id="@+id/pressure_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ExtraWeatherMeasurement"
             app:layout_constraintStart_toStartOf="@+id/humidity_value"
             app:layout_constraintTop_toTopOf="@+id/pressure"
             tools:text="998 hpa" />
 
         <TextView
             android:id="@+id/wind"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Wind"
+            style="@style/DetailLabel"
+            android:text="@string/wind_label"
             app:layout_constraintStart_toStartOf="@id/pressure"
             app:layout_constraintTop_toBottomOf="@id/pressure" />
 
         <TextView
             android:id="@+id/wind_speed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ExtraWeatherMeasurement"
             app:layout_constraintStart_toStartOf="@+id/pressure_value"
             app:layout_constraintTop_toTopOf="@+id/wind"
             tools:text="3 KM/H SW" />

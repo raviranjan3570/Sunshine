@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- default screen margin as per android design guideline-->
+    <dimen name="forecast_detail_horizontal_padding">32dp</dimen>
+    <dimen name="forecast_detail_vertical_padding">16dp</dimen>
+
+    <!-- icon size-->
+    <dimen name="today_icon">96dp</dimen>
+    <dimen name="list_icon">40dp</dimen>
+
+    <!-- we are using dp rather than sp because these are already large fonts and going larger will
+     only cause problems-->
+    <dimen name="forecast_text_size">28sp</dimen>
+
+    <dimen name="forecast_temperature_space">4dp</dimen>
+
+    <dimen name="today_forecast_list_item_vertical_padding">16dp</dimen>
+    <dimen name="list_item_icon_margin_right">24dp</dimen>
+    <dimen name="list_item_padding_vertical">12dp</dimen>
+    <dimen name="list_item_padding_horizontal">16dp</dimen>
+    <dimen name="loading_indicator_size">42dp</dimen>
+    <dimen name="list_item_high_temperature_margin">12dp</dimen>
+    <dimen name="list_item_low_temperature_text_view_size">48dp</dimen>
+    <dimen name="list_item_date_left_margin">16dp</dimen>
+</resources>

@@ -11,4 +11,29 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
+    <!-- forecast activity action bar style -->
+    <style name="ActionBar.solid.sunshine.noTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="displayOptions">useLogo|showHome</item>
+        <item name="logo">@drawable/ic_logo</item>
+    </style>
+
+    <style name="AppTheme.Forecast" parent="@style/AppTheme">
+        <item name="actionBarStyle">@style/ActionBar.solid.sunshine.noTitle</item>
+    </style>
+
+    <!-- styles used in detail activity for extra weather information labels-->
+    <style name="DetailLabel" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/detail_accent_label</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+
+    <!-- styles used in detail activity for extra weather information labels-->
+    <style name="ExtraWeatherMeasurement" parent="@style/TextAppearance.AppCompat.Headline">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>
