@@ -23,7 +23,6 @@ import com.example.android.sunshine.activities.SettingsActivity;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.sync.SunshineSyncUtils;
-import com.example.android.sunshine.utilities.NotificationUtils;
 
 import java.util.Objects;
 
@@ -131,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements
         LoaderManager.getInstance(this).initLoader(FORECAST_LOADER_ID, null, this);
 
         SunshineSyncUtils.initialize(this);
-        NotificationUtils.notifyUserOfNewWeather(this);
     }
 
     /**
